@@ -20,7 +20,7 @@ const STYLE_PATH = path.join(SRC_PATH, "styles");
 const TEMPLATE_PATH = path.join(SRC_PATH, "templates");
 
 // Import module.json for some config options
-import moduleConfig from "./module.json" assert { type: "json" };
+import moduleConfig from "./module.json" with { type: "json" };
 
 // Constants to be inserted into process.env during build
 const __DEV__ = process.env.NODE_ENV !== "production";
@@ -33,7 +33,8 @@ let spinner = null;
 
 if (!process.argv.slice(2).includes("--no-lint")) {
   const lintStart = Date.now();
-  if (!process.env.GITHUB_ACTIONS) spinner = yoctoSpinner({ text: "Linting..." }).start();
+  if (!process.env.GITHUB_ACTIONS)
+    spinner = yoctoSpinner({ text: "Linting..." }).start();
   else console.log("Linting...");
 
   const linter = new ESLint({
@@ -54,13 +55,20 @@ if (!process.argv.slice(2).includes("--no-lint")) {
     console.log(formatter.format(lintResults));
     process.exit();
   } else {
-    if (spinner) spinner.success(`Linting passed in ${((Date.now() - start) / 1000).toFixed(2)}s`);
-    else console.log(`Linting passed in ${((Date.now() - start) / 1000).toFixed(2)}s`)
+    if (spinner)
+      spinner.success(
+        `Linting passed in ${((Date.now() - start) / 1000).toFixed(2)}s`
+      );
+    else
+      console.log(
+        `Linting passed in ${((Date.now() - start) / 1000).toFixed(2)}s`
+      );
   }
 }
 
 const buildStart = Date.now();
-if (!process.env.GITHUB_ACTIONS) spinner = yoctoSpinner({ text: "Building..." }).start();
+if (!process.env.GITHUB_ACTIONS)
+  spinner = yoctoSpinner({ text: "Building..." }).start();
 else console.log("Building...");
 const jsonMergers = (
   await fs.readdir(LANG_PATH, { withFileTypes: true })
@@ -80,7 +88,7 @@ const jsonMergers = (
 // Create our copy plugins, ensuring that the paths we're copying from exist
 const STATIC_FILES = [
   { src: "./module.json", dest: "module.json" },
-  { src: "./system.json", dest: "system.json" },
+  // { src: "./system.json", dest: "system.json" },
   { src: "./LICENSE", dest: "LICENSE" },
   { src: "./README.md", dest: "README.md" },
   { src: path.join(SRC_PATH, "fonts"), dest: "fonts" },
@@ -142,11 +150,15 @@ if (buildResults.errors.length) {
   spinner.error("Build failed!");
   console.error(buildResults.errors);
 } else {
-  if (spinner) spinner.success(`Build completed in ${((Date.now() - buildStart) / 1000).toFixed(2)}s`);
+  if (spinner)
+    spinner.success(
+      `Build completed in ${((Date.now() - buildStart) / 1000).toFixed(2)}s`
+    );
   if (buildResults.warnings.length) console.warn(buildResults.warnings);
 
-    const packStart = Date.now();
-  if (!process.env.GITHUB_ACTIONS) spinner = yoctoSpinner({ text: "Packing compendia..." }).start();
+  const packStart = Date.now();
+  if (!process.env.GITHUB_ACTIONS)
+    spinner = yoctoSpinner({ text: "Packing compendia..." }).start();
   else console.log("Packing compendia...");
   try {
     // Build compendia
@@ -159,8 +171,14 @@ if (buildResults.errors.length) {
         { yaml: false }
       );
     }
-    if (spinner) spinner.success(`Compendia packed in ${((Date.now() - packStart) / 1000).toFixed(2)}s`);
-    else console.log(`Compendia packed in ${((Date.now() - packStart) / 1000).toFixed(2)}s`);
+    if (spinner)
+      spinner.success(
+        `Compendia packed in ${((Date.now() - packStart) / 1000).toFixed(2)}s`
+      );
+    else
+      console.log(
+        `Compendia packed in ${((Date.now() - packStart) / 1000).toFixed(2)}s`
+      );
   } catch (err) {
     if (spinner) spinner.error("Build failed!");
     else console.error("Build failed!");
