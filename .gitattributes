@@ -1,5 +1,5 @@
 src/assets/music filter=lfs diff=lfs merge=lfs -text
 src/assets/sfx filter=lfs diff=lfs merge=lfs -text
-.mp3 filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
 src/assets/Music filter=lfs diff=lfs merge=lfs -text
 src/assets/SFX filter=lfs diff=lfs merge=lfs -text
